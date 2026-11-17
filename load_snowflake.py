@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def load_to_bronze():
-    # 1. Snowflake database ki login avvadam
+    # 1. Snowflake database login
     conn = snowflake.connector.connect(
         user=os.getenv('SNOWFLAKE_USER'),
         password=os.getenv('SNOWFLAKE_PASSWORD'),
@@ -16,7 +16,7 @@ def load_to_bronze():
     )
     cursor = conn.cursor()
 
-    # 2. S3 lo unna flights.parquet ni Snowflake Bronze table loki append cheyadam
+    # 2. S3  flights.parquet to  Snowflake Bronze table  appending
     cursor.execute("""
         COPY INTO bronze_flight_raw
         FROM @cdc_s3_stage/aviation_data/flights.parquet
@@ -27,7 +27,7 @@ def load_to_bronze():
 
     print("Success: Live flight batch appended into Snowflake Bronze Table!")
 
-    # 3. Save chesi connection close cheyadam
+    # 3. Save  connection close 
     conn.commit()
     cursor.close()
     conn.close()
